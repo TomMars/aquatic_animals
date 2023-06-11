@@ -33,7 +33,6 @@ function ENT:Initialize()
     self.attack = false
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
-    self.jaw = self:LookupBone("jaw")
 end
 
 function ENT:RunBehaviour()
