@@ -167,7 +167,7 @@ function ENT:RunBehaviour()
 
         if self.suffocate > -1 then
             self.suffocate = self.suffocate + 1
-            if self.suffocate >= 300 then
+            if self.suffocate >= 150 then
                 self:TakeDamage(self:Health(), self)
             end
         end
@@ -185,10 +185,13 @@ function ENT:Think()
         end
         self.suffocate = -1
     else
-        self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * 100)
         self.depth = self.minDepth
         if self.suffocate == -1 then
             self.suffocate = 0
+        elseif self.suffocate < 20 then
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * 100)
+        else
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp())
         end
     end
 end

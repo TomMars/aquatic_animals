@@ -16,8 +16,20 @@ list.Set("NPC", "npc_hammerhead_shark", {
     Category = "Aquatic Animals"
 })
 
+list.Set("NPC", "npc_bull_shark", {
+    Name = "Bull Shark",
+    Class = "npc_bull_shark",
+    Category = "Aquatic Animals"
+})
+
 list.Set("NPC", "npc_great_white_shark", {
     Name = "Great White Shark",
     Class = "npc_great_white_shark",
     Category = "Aquatic Animals"
+})
+
+list.Set("NPC", "npc_megalodon", {
+    Name = "Megalodon",
+    Class = "npc_megalodon",
+    Category = "Extinct Aquatic Animals"
 })

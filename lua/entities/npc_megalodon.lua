@@ -3,12 +3,12 @@ AddCSLuaFile()
 
 ENT.base = "base_shark"
 
-ENT.model = "models/aquatic_animals/great_white_shark.mdl"
-ENT.health = 1000
-ENT.speed = 110
-ENT.damage = 200
+ENT.model = "models/aquatic_animals/megalodon.mdl"
+ENT.health = 3000
+ENT.speed = 120
+ENT.damage = 1000
 
+ENT.radius = 2000
 ENT.upStep = 60
 
-ENT.predator = {npc_megalodon = true}
 ENT.vehicles = {Airboat = true, vehicle_kaw_jetski = true}
