@@ -28,6 +28,12 @@ list.Set("NPC", "npc_great_white_shark", {
     Category = "Aquatic Animals"
 })
 
+list.Set("NPC", "npc_killer_whale", {
+    Name = "Killer Whale",
+    Class = "npc_killer_whale",
+    Category = "Aquatic Animals"
+})
+
 list.Set("NPC", "npc_megalodon", {
     Name = "Megalodon",
     Class = "npc_megalodon",
