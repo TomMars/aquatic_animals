@@ -1,8 +1,8 @@
 "VertexLitGeneric"
-{
-	"$basetexture" "aquatic_animals/reef_shark/shark_skin"
+{	
+	"$baseTexture" "aquatic_animals\killer_whale\skin"
 	"$halflambert" 1
-	"$bumpmap" "aquatic_animals/blue_shark/shark_skin_n"
+	"$bumpmap" "aquatic_animals\killer_whale\skin_n"
 	"$phong" "1"
 	"$phongexponent" 25
 	"$phongboost"	"1"

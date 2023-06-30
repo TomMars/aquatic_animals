@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{	
+	"$baseTexture" "aquatic_animals\killer_whale\teeth"
+	"$model" 1
+	"$rimlight" "1"
+	"$rimlightexponent" "8"
+	"$rimlightboost" "2"
+	"$phong"     "1"
+}

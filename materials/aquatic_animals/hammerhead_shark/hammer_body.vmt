@@ -1,5 +1,10 @@
 "VertexLitGeneric"
 {
-"$baseTexture" "aquatic_animals/hammerhead_shark/hammer_body"
-"$halflambert" 1
+	"$basetexture" "aquatic_animals/hammerhead_shark/hammer_body"
+	"$halflambert" 1
+	"$bumpmap" "aquatic_animals/hammerhead_shark/hammer_body_n"
+	"$phong" "1"
+	"$phongexponent" 25
+	"$phongboost"	"1"
+	"$phongfresnelranges"	"[0.05 0.5 1]"
 }
