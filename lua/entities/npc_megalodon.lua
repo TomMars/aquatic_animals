@@ -11,4 +11,4 @@ ENT.damage = 1000
 ENT.radius = 2000
 ENT.upStep = 60
 
-ENT.vehicles = {Airboat = true, vehicle_kaw_jetski = true}
+ENT.wreckable_vehicles = {"small", "big"}

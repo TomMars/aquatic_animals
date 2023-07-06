@@ -14,7 +14,7 @@ ENT.maxDepth = 110
 
 ENT.ignore = {}
 ENT.predator = {}
-ENT.vehicles = {}
+ENT.wreckable_vehicles = {} --small, big, huge
 
 if CLIENT then 
     return 
@@ -33,6 +33,13 @@ function ENT:Initialize()
     self.attack = false
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
+
+    self.vehicles = {}
+    for key, val in pairs(self.wreckable_vehicles) do
+        for k, v in pairs(util.JSONToTable(file.Read("aquatic_animals/wreckable_vehicles.json"))[val]) do
+            self.vehicles[v] = true
+        end
+    end
 end
 
 function ENT:RunBehaviour()

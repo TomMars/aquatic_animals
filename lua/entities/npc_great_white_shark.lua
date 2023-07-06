@@ -11,4 +11,4 @@ ENT.damage = 200
 ENT.upStep = 75
 
 ENT.predator = {npc_megalodon = true}
-ENT.vehicles = {Airboat = true, vehicle_kaw_jetski = true}
+ENT.wreckable_vehicles = {"small"}

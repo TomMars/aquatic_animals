@@ -12,4 +12,4 @@ ENT.upStep = 70
 
 ENT.ignore = {npc_killer_whale = true}
 ENT.predator = {npc_megalodon = true}
-ENT.vehicles = {Airboat = true, vehicle_kaw_jetski = true}
+ENT.wreckable_vehicles = {"small"}
