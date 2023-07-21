@@ -1,7 +1,7 @@
-include("base_shark.lua")
+include("aquatic_apex_mammal.lua")
 AddCSLuaFile()
 
-ENT.base = "base_shark"
+ENT.base = "aquatic_apex_mammal"
 
 ENT.model = "models/aquatic_animals/killer_whale.mdl"
 ENT.health = 1000

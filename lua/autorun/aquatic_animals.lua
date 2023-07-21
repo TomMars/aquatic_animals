@@ -78,10 +78,10 @@ hook.Add("PopulateToolMenu", "AquaticAnimalsSettings", function()
 
         function modify:DoClick()
             if !promptOpen then
-                promptOpen = true
                 local _, line = pnl:GetSelectedLine()
 
                 if line != nil then
+                    promptOpen = true
                     local frame, input, cbox = PromptFrame("Modify a wreckable vehicle")
                     input:SetValue(line:GetColumnText(1))
                     cbox:SetValue(line:GetColumnText(2))
@@ -93,8 +93,6 @@ hook.Add("PopulateToolMenu", "AquaticAnimalsSettings", function()
                         end
                         promptOpen = false
                     end
-                else
-                    promptOpen = false
                 end
             end
         end

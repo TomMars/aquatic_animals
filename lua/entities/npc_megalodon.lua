@@ -1,10 +1,10 @@
-include("base_shark.lua")
+include("aquatic_shark.lua")
 AddCSLuaFile()
 
-ENT.base = "base_shark"
+ENT.base = "aquatic_shark"
 
 ENT.model = "models/aquatic_animals/megalodon.mdl"
-ENT.health = 3000
+ENT.health = 5000
 ENT.speed = 120
 ENT.damage = 1000
 
