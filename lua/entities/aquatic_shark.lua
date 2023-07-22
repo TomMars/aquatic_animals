@@ -9,7 +9,7 @@ ENT.damage = 20
 
 ENT.radius = 1000
 ENT.upStep = 20
-ENT.minDepth = 104
+ENT.minDepth = 103
 ENT.maxDepth = 110
 
 ENT.ignore = {}

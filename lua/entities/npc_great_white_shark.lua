@@ -10,5 +10,5 @@ ENT.damage = 200
 
 ENT.upStep = 75
 
-ENT.predator = {npc_megalodon = true}
+ENT.predator = {npc_sperm_whale = true, npc_megalodon = true}
 ENT.wreckable_vehicles = {"small"}

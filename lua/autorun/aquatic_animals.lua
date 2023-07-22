@@ -186,6 +186,12 @@ list.Set("NPC", "npc_killer_whale", {
     Category = "Aquatic Animals"
 })
 
+list.Set("NPC", "npc_sperm_whale", {
+    Name = "Sperm Whale",
+    Class = "npc_sperm_whale",
+    Category = "Aquatic Animals"
+})
+
 list.Set("NPC", "npc_megalodon", {
     Name = "Megalodon",
     Class = "npc_megalodon",
