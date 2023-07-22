@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$basetexture" 			"aquatic_animals/sperm_whale/Sperm_whale"
+	"$bumpmap"     			"aquatic_animals/phong"
+
+	"$phong" "1"
+	"$phongexponent" "21"
+	"$phongboost" "0.25"	
+	"$phongfresnelranges"	"[.15 0.75 15]"
+
+	"$rimlight" "1"												// To enable rim lighting (requires phong)
+	"$rimlightexponent" "8"										// Exponent for phong component of rim lighting	
+	"$rimlightboost" ".5"										// Boost for ambient cube component of rim lighting
+}
