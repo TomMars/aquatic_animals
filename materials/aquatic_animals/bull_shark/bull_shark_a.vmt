@@ -19,7 +19,7 @@ $phongtint "[1 .85 .85]"
 
 $lightwarp "models/sheva_nude/l4d2_lightwarp"
 
-$detail "aquatic_animals\bull_shark\skindetail"
+$detail "aquatic_animals\skindetail"
 $detailscale 35
 $detailblendfactor 1.7
 $detailblendmode 0
