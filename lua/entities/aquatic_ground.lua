@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Base = "base_nextbot"
 ENT.Spawnable = true
 
-ENT.model = "models/aquatic_animals/sea_turtle.mdl"
+ENT.model = "models/aquatic_animals/sea_turtle_ground.mdl"
 ENT.health = 100
 ENT.speed = 25
 ENT.damage = 10
@@ -20,7 +20,7 @@ function ENT:Initialize()
     self:SetModel(self.model)
     self:SetHealth(self.health)
     self:SetPos(self:GetPos() + Vector(0,0,200))
-    self:StartActivity(ACT_WALK)
+    self:StartActivity(ACT_IDLE)
 
     self.fear = false
     self.target = nil
@@ -80,7 +80,7 @@ function ENT:RunBehaviour()
                 end
 
                 if target then
-                    self.loco:SetDesiredSpeed(self.speed * 1.5)
+                    self.loco:SetDesiredSpeed(self.speed * 2)
                     self.loco:SetStepHeight(32)
                     if self.attack then     --damage the prey
                         self:PlaySequenceAndWait("attack")
@@ -93,7 +93,7 @@ function ENT:RunBehaviour()
                             end
                         end
 
-                        self:StartActivity(ACT_WALK)
+                        self:StartActivity(ACT_IDLE)
                         self.attack = false
                     end
                 else
@@ -103,7 +103,7 @@ function ENT:RunBehaviour()
             end
             
         else        --fear
-            self.loco:SetDesiredSpeed(self.speed * 1.5)
+            self.loco:SetDesiredSpeed(self.speed * 2)
             self.loco:SetStepHeight(50)
             
             if self.turnCount >= 10 then
