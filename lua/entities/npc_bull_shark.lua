@@ -4,6 +4,7 @@ AddCSLuaFile()
 ENT.base = "aquatic_shark"
 
 ENT.model = "models/aquatic_animals/bull_shark.mdl"
+ENT.damage = 35
 
 ENT.upStep = 60
 

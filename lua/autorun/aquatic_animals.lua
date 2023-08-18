@@ -192,8 +192,14 @@ list.Set("NPC", "npc_sperm_whale", {
     Category = "Aquatic Animals"
 })
 
+list.Set("NPC", "npc_sea_turtle", {
+    Name = "Sea Turtle",
+    Class = "npc_sea_turtle",
+    Category = "Aquatic Animals"
+})
+
 list.Set("NPC", "npc_megalodon", {
     Name = "Megalodon",
     Class = "npc_megalodon",
-    Category = "Extinct Aquatic Animals"
+    Category = "Aquatic Animals (Extinct)"
 })

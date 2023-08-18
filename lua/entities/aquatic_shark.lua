@@ -172,7 +172,7 @@ function ENT:RunBehaviour()
 
         if self.suffocate > -1 then
             self.suffocate = self.suffocate + 1
-            if self.suffocate >= 150 then
+            if self.suffocate >= 1200 then
                 self:TakeDamage(self:Health(), self)
             end
         end

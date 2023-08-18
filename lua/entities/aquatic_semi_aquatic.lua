@@ -6,7 +6,6 @@ ENT.model = ""
 ENT.health = 100
 ENT.speed = 100
 ENT.damage = 20
-ENT.mad = false --attacks players, props and moving vehicles
 
 ENT.radius = 1000
 ENT.upStep = 20
@@ -17,12 +16,13 @@ ENT.ignore = {}
 ENT.predator = {}
 ENT.wreckable_vehicles = {} --small, big, huge
 
+ENT.switchState = false
+
 if CLIENT then return end
 
 function ENT:Initialize()
     self:SetModel(self.model)
     self:SetHealth(self.health)
-    self:SetPos(self:GetPos() + Vector(0,0,200))
     self:StartActivity(ACT_IDLE)
 
     self.fear = false
@@ -33,7 +33,21 @@ function ENT:Initialize()
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
     self.class = self:GetClass()
-    self.lastSound = ""
+
+    if !self.switchState then
+        if self:WaterLevel() == 0 then
+            local ent = ents.Create(self.class.."_ground")
+            ent:SetPos(self:GetPos())
+            ent:SetAngles(self:GetAngles())
+            ent:SetSkin(self:GetSkin())
+            ent:Spawn()
+            self:Remove()
+        else
+            self:SetPos(self:GetPos() + Vector(0,0,200))
+        end
+    else
+        self:SetPos(self:GetPos() + Vector(0,0,self.upStep))
+    end
 
     self.vehicles = {}
     for _, val in pairs(self.wreckable_vehicles) do
@@ -49,10 +63,6 @@ function ENT:RunBehaviour()
             if self.target == nil then
                 if self.turnCount == 20 and math.random(1, 100) == 2 then     --1% chance of having a random angle
                     self:SetAngles(Angle(0, math.random(0, 360), 0))
-                    if math.random(1, 2) == 2 then
-                        self.lastSound = "aquatic_animals/".. string.sub(self.class, 5).. "_idle".. math.random(1,3).. ".mp3"
-                        self:EmitSound(self.lastSound, 100)
-                    end
                 end
                 
                 if self.depth == self.minDepth and self:WaterLevel() > 0 and math.random(1, 2000) == 2 then     --0,05% chance of changing depth
@@ -66,7 +76,7 @@ function ENT:RunBehaviour()
                     for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do 	 	--looking for prey
                         local class = v:GetClass()
 
-                        if ((!self.ignore[class] and v != self and (v:IsNextBot() or (self.mad and (!v:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:Health() > 0) or (self.mad and v:IsVehicle() and self.vehicles[v:GetVehicleClass()] and v:IsEngineStarted() and (!v:GetDriver():IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
+                        if ((!self.ignore[class] and v != self and (!v:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0) and v:Health() > 0) or (v:IsVehicle() and self.vehicles[v:GetVehicleClass()] and v:IsEngineStarted() and (!v:GetDriver():IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
                             if self.predator[class] then
                                 self.fear = true
                                 self.target = v
@@ -179,9 +189,6 @@ function ENT:RunBehaviour()
 
         if self.suffocate > -1 then
             self.suffocate = self.suffocate + 1
-            if self.suffocate >= 1200 then
-                self:TakeDamage(self:Health(), self)
-            end
         end
 
         coroutine.wait(0.1)
@@ -210,10 +217,19 @@ end
 
 function ENT:OnLandOnGround(ent)    --avoid to be stuck in the ground
     self:SetPos(self:GetPos() + Vector(0,0,self.upStep))
-    if (self.fear or self.target == nil) and (self:WaterLevel() < 3 or math.random(1, 4) == 2) then
-        self:SetAngles(Angle(0, self:GetAngles().y + 180, 0))
+    if self:WaterLevel() < 3 then   --change to ground behaviour
+        local ent = ents.Create(self.class.."_ground")
+        ent:SetPos(self:GetPos())
+        ent:SetAngles(self:GetAngles())
+        ent:SetSkin(self:GetSkin())
+        ent:Spawn()
+        self:Remove()
+    else
+        if (self.fear or self.target == nil) and math.random(1, 4) == 2 then
+            self:SetAngles(Angle(0, self:GetAngles().y + 180, 0))
+        end
+        self.depth = self.maxDepth
     end
-    self.depth = self.maxDepth
 end
 
 function ENT:OnContact(ent)
@@ -236,27 +252,15 @@ function ENT:OnContact(ent)
 end
 
 function ENT:OnInjured(dmg)
-    self:StopSound(self.lastSound)
-    self.lastSound = "aquatic_animals/".. string.sub(self.class, 5).. "_injured".. math.random(1,2).. ".mp3"
-    self:EmitSound(self.lastSound, 100)
-    
     local attacker = dmg:GetAttacker()
     if self.target == nil and !self.predator[attacker:GetClass()] and (!attacker:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0) then
         if attacker:WaterLevel() == 0 then
             self.depth = self.minDepth
         else
-            local isPly = attacker:IsPlayer()
             for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do
                 if v == attacker then
                     self.target = attacker
-                    if attacker:IsPlayer() then
-                        self.mad = true
-                    end
-                elseif isPly and v:GetClass() == self.class and v:IsValid() and v:WaterLevel() > 0 then     --surrounding npcs with the same class will be mad
-                    v.mad = true
-                    if v.target == nil then
-                        v:BehaveStart()
-                    end
+                    break
                 end
             end
         end

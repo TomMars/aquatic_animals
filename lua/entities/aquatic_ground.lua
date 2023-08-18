@@ -1,17 +1,17 @@
 AddCSLuaFile()
 
 ENT.Base = "base_nextbot"
-ENT.Spawnable = true
 
-ENT.model = "models/aquatic_animals/sea_turtle_ground.mdl"
+ENT.model = ""
 ENT.health = 100
 ENT.speed = 25
-ENT.damage = 10
+ENT.damage = 20
 ENT.aggressive = false
 
 ENT.radius = 500
 
-ENT.ignore = {aquatic_ground = true}
+ENT.ignore = {}
+ENT.prey = {} --used for kind npcs
 ENT.predator = {}
 
 if CLIENT then return end
@@ -19,16 +19,16 @@ if CLIENT then return end
 function ENT:Initialize()
     self:SetModel(self.model)
     self:SetHealth(self.health)
-    self:SetPos(self:GetPos() + Vector(0,0,200))
     self:StartActivity(ACT_IDLE)
 
     self.fear = false
     self.target = nil
     self.turnCount = 0
     self.attack = false
-    self.pos = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.radius * 10)
+    self.pos = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.radius * 50)
     self.fearPlayers = false
     -- self.lastSound = ""
+    self.groundTimer = -1
 end
 
 function ENT:RunBehaviour()
@@ -38,7 +38,7 @@ function ENT:RunBehaviour()
                 self.loco:SetDesiredSpeed(self.speed)
                 self.loco:SetStepHeight(50)  --not colliding eachother
                 if math.random(1, 100) == 2 then     --1% chance of having a random angle
-                    self.pos = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.radius * 10)
+                    self.pos = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.radius * 50)
                 end
 
                 local target = nil
@@ -47,7 +47,7 @@ function ENT:RunBehaviour()
                     for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do 	 	--looking for prey
                         local class = v:GetClass()
 
-                    if !self.ignore[class] and v != self and (v:IsNextBot() or ((self.aggressive or self.fearPlayers) and (!v:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:Health() > 0 then
+                    if !self.ignore[class] and v != self and ((v:IsNextBot() and (self.aggressive or self.prey[class])) or ((self.aggressive or self.fearPlayers) and (!v:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:Health() > 0 then
                         if self.predator[class] or (self.fearPlayers and v:IsPlayer()) then
                             self.fear = true
                             self.target = v
@@ -97,7 +97,7 @@ function ENT:RunBehaviour()
                         self.attack = false
                     end
                 else
-                    self.pos = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.radius * 10)
+                    self.pos = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.radius * 50)
                     self.target = nil
                 end
             end
@@ -132,14 +132,14 @@ function ENT:RunBehaviour()
                 else
                     for _, v in pairs(ents.FindInCone(self:GetPos(), self:GetForward(), self.radius, 0,707)) do  --change the angle if facing the predator
                         if v == target then
-                            self.pos = Angle(0, self:GetAngles().y + 180, 0):Forward() * self.radius * 10
+                            self.pos = Angle(0, self:GetAngles().y + 180, 0):Forward() * self.radius * 50
                             self.turnCount = 0
                             break
                         end          
                     end
                     self.target = target
                     if self.turnCount >= 10 and math.random(1, 50) == 2 then
-                        self.pos = Angle(0, self:GetAngles().y + math.random(-45, 45), 0):Forward() * self.radius * 10
+                        self.pos = Angle(0, self:GetAngles().y + math.random(-45, 45), 0):Forward() * self.radius * 50
                         self.turnCount = 0
                     end
                 end
@@ -148,6 +148,21 @@ function ENT:RunBehaviour()
 
         if self.turnCount < 20 then     --avoid to turn every 0.1s when fearing multiple predators
             self.turnCount = self.turnCount + 1
+        end
+
+        if self:WaterLevel() == 3 then
+            self.groundTimer = self.groundTimer + 1
+            if self.groundTimer >= 150 and self:WaterLevel() == 3 then
+                local ent = ents.Create(string.sub(self:GetClass(), 1, -8))
+                ent:SetPos(self:GetPos())
+                ent:SetAngles(self:GetAngles())
+                ent:SetSkin(self:GetSkin())
+                ent.switchState = true
+                ent:Spawn()
+                self:Remove()
+            end
+        else
+            self.groundTimer = -1
         end
 
         coroutine.wait(0.1)
