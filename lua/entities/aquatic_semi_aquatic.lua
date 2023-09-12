@@ -6,6 +6,7 @@ ENT.model = ""
 ENT.health = 100
 ENT.speed = 100
 ENT.damage = 20
+ENT.aggressive = false
 
 ENT.radius = 1000
 ENT.upStep = 20
@@ -16,7 +17,7 @@ ENT.ignore = {}
 ENT.predator = {}
 ENT.wreckable_vehicles = {} --small, big, huge
 
-ENT.switchState = false
+ENT.switchState = false --used to avoid a high jump when changing behaviour
 
 if CLIENT then return end
 
@@ -31,6 +32,7 @@ function ENT:Initialize()
     self.turnCount = 20
     self.attack = false
     self.lastPos = Vector(0, 0, 0)
+    self.fearPlayers = false
     self.suffocate = -1
     self.class = self:GetClass()
 
