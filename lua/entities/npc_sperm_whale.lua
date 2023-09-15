@@ -8,7 +8,7 @@ ENT.health = 3000
 ENT.speed = 120
 ENT.damage = 500
 
-ENT.radius = 3000
+ENT.radius = 2000
 ENT.upStep = 60
 
 ENT.ignore = {npc_sperm_whale = true, npc_sea_turtle = true, npc_sea_turtle_ground = true}

@@ -30,6 +30,7 @@ function ENT:Initialize()
     self.depth = self.maxDepth
     self.turnCount = 20
     self.attack = false
+    self.dmgRadius = math.pow(self.radius/4, 2)
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
     self.class = self:GetClass()
@@ -104,7 +105,7 @@ function ENT:RunBehaviour()
                     if self.attack then     --damage the prey
                         self:PlaySequenceAndWait("attack")
 
-                        if self.target:IsValid() and self.target:WaterLevel() > 0 then
+                        if self.target:IsValid() and self.target:WaterLevel() > 0 and self:GetPos():DistToSqr(self.target:GetPos()) <= self.dmgRadius then    --also check if the target is not too far away
                             if self.target:IsVehicle() then
                                 self.target:EmitSound("physics/metal/metal_large_debris".. math.random(1, 2).. ".wav")
                                 self.target:Remove()
