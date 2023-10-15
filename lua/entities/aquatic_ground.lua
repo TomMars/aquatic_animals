@@ -18,7 +18,6 @@ ENT.predator = {}
 if CLIENT then return end
 
 --TODO
---navmesh (clamp the wandering zone?)
 --!!swimming behaviour!!
 --sound
 --random skin
@@ -34,11 +33,11 @@ function ENT:Initialize()
     self.turnCount = 0
     self.attack = false
 
-    self.dmgRadius = math.pow(self.radius/4, 2)
+    self.dmgRadius = math.pow(self.radius*0.25, 2)
     if self.identicalRadius then
         self.groundRadius = self.radius
     else
-        self.groundRadius = self.radius/2
+        self.groundRadius = self.radius*0.5
     end
     self.groundDmgRadius = math.pow(self.groundRadius*0.2, 2)
 
@@ -250,7 +249,7 @@ function ENT:NavBehaviour() --when navmesh
             self.loco:SetDesiredSpeed(self.speed)
             self.loco:SetStepHeight(50)  --not colliding eachother
             if math.random(1, 3) == 2 then     --33% chance of having a random angle
-                self:MoveToPos(self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (self.groundRadius/2))
+                self:MoveToPos(self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * (math.random(self.groundRadius*0.25, self.groundRadius*0.5)))
             end
             self.idleState = true
             self:PlaySequenceAndWait("idle" .. math.random(1,3))
@@ -284,8 +283,8 @@ function ENT:NavBehaviour() --when navmesh
 
                 while path:IsValid() and self.target != nil do
                 
-                    if path:GetAge() > 0.1 then					-- Since we are following the player we have to constantly remake the path
-                        path:Compute(self, self.target:GetPos())-- Compute the path towards the enemy's position again
+                    if path:GetAge() > 0.1 then					-- Since we are following the target we have to constantly remake the path
+                        path:Compute(self, self.target:GetPos())    -- Compute the path towards the enemy's position again
                     end
                     path:Update(self)								-- This function moves the bot along the path
                     
