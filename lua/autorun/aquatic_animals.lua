@@ -150,56 +150,25 @@ end)
 
 
 --------------- SPAWNLIST -----------------
-list.Set("NPC", "npc_blue_shark", {
-    Name = "Blue Shark",
-    Class = "npc_blue_shark",
-    Category = "Aquatic Animals"
-})
+local animals = {"Blue Shark", "Reef Shark", "Hammerhead Shark", "Bull Shark", "Great White Shark", 
+                 "Killer Whale", "Sperm Whale", "Sea Turtle"}
 
-list.Set("NPC", "npc_reef_shark", {
-    Name = "Reef Shark",
-    Class = "npc_reef_shark",
-    Category = "Aquatic Animals"
-})
+for _, name in pairs(animals) do
+    local class = "npc_".. string.Replace(string.lower(name), " ", "_")
+    list.Set("NPC", class, {
+        Name = name,
+        Class = class,
+        Category = "Aquatic Animals"
+    })
+end
 
-list.Set("NPC", "npc_hammerhead_shark", {
-    Name = "Hammerhead Shark",
-    Class = "npc_hammerhead_shark",
-    Category = "Aquatic Animals"
-})
+animals = {"Megalodon"}
 
-list.Set("NPC", "npc_bull_shark", {
-    Name = "Bull Shark",
-    Class = "npc_bull_shark",
-    Category = "Aquatic Animals"
-})
-
-list.Set("NPC", "npc_great_white_shark", {
-    Name = "Great White Shark",
-    Class = "npc_great_white_shark",
-    Category = "Aquatic Animals"
-})
-
-list.Set("NPC", "npc_killer_whale", {
-    Name = "Killer Whale",
-    Class = "npc_killer_whale",
-    Category = "Aquatic Animals"
-})
-
-list.Set("NPC", "npc_sperm_whale", {
-    Name = "Sperm Whale",
-    Class = "npc_sperm_whale",
-    Category = "Aquatic Animals"
-})
-
-list.Set("NPC", "npc_sea_turtle", {
-    Name = "Sea Turtle",
-    Class = "npc_sea_turtle",
-    Category = "Aquatic Animals"
-})
-
-list.Set("NPC", "npc_megalodon", {
-    Name = "Megalodon",
-    Class = "npc_megalodon",
-    Category = "Aquatic Animals (Extinct)"
-})
+for _, name in pairs(animals) do
+    local class = "npc_".. string.Replace(string.lower(name), " ", "_")
+    list.Set("NPC", class, {
+        Name = name,
+        Class = class,
+        Category = "Aquatic Animals (Extinct)"
+    })
+end

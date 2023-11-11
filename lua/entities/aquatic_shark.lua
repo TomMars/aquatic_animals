@@ -3,12 +3,13 @@ AddCSLuaFile()
 ENT.Base = "base_nextbot"
 
 ENT.model = ""
+ENT.skin = {0}
 ENT.health = 100
 ENT.speed = 100
 ENT.damage = 20
 
 ENT.radius = 1000
-ENT.upStep = 20
+ENT.upStep = 45
 ENT.minDepth = 103
 ENT.maxDepth = 110
 
@@ -20,6 +21,7 @@ if CLIENT then return end
 
 function ENT:Initialize()
     self:SetModel(self.model)
+    self:SetSkin(self.skin[math.random(#self.skin)])
     self:SetHealth(self.health)
     self:SetPos(self:GetPos() + Vector(0,0,200))
     self:StartActivity(ACT_IDLE)
@@ -29,7 +31,7 @@ function ENT:Initialize()
     self.depth = self.maxDepth
     self.turnCount = 20
     self.attack = false
-    self.dmgRadius = math.pow(self.radius/4, 2)
+    self.dmgRadius = math.pow(self.radius*0.25, 2)
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
 
