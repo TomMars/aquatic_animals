@@ -3,8 +3,7 @@ AddCSLuaFile()
 
 ENT.base = "aquatic_shark"
 
-ENT.model = "models/aquatic_animals/great_white_shark.mdl"
-ENT.skin = {0, 1}
+ENT.model = "models/aquatic_animals/great_white_shark_2.mdl"
 ENT.health = 1000
 ENT.speed = 110
 ENT.damage = 200

@@ -10,8 +10,8 @@ ENT.damage = 20
 
 ENT.radius = 1000
 ENT.upStep = 45
-ENT.minDepth = 103
-ENT.maxDepth = 110
+ENT.minDepth = 69
+ENT.maxDepth = 76
 
 ENT.ignore = {}
 ENT.predator = {}
@@ -187,9 +187,9 @@ end
 function ENT:Think()
     if self:WaterLevel() == 3 then
         if self.target == nil then
-            self.loco:SetVelocity(self:GetForward() * self.speed + self:GetUp() * self.depth)
+            self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * self.depth) * (100*engine.TickInterval()))
         else
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 3) + self:GetUp() * self.depth)
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 4) + (self:GetUp() * self.depth) * (100*engine.TickInterval()))
         end
         self.suffocate = -1
     else
@@ -197,9 +197,9 @@ function ENT:Think()
         if self.suffocate == -1 then
             self.suffocate = 0
         elseif self.suffocate < 20 then
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * 100)
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + (self:GetUp() * (self.minDepth -3)) * (100*engine.TickInterval()))
         else
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp())
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * (100*engine.TickInterval()))
         end
     end
 end
