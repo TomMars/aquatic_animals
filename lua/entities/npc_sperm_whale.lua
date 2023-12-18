@@ -11,5 +11,5 @@ ENT.damage = 500
 ENT.radius = 2000
 ENT.upStep = 60
 
-ENT.ignore = {npc_sperm_whale = true, npc_sea_turtle = true}
+ENT.ignore = {npc_sperm_whale = true, npc_sea_turtle = true, npc_dolphin = true, npc_manatee = true}
 ENT.wreckable_vehicles = {"small", "big"}

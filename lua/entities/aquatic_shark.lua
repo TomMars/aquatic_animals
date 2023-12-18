@@ -127,7 +127,7 @@ function ENT:RunBehaviour()
                 local target = nil
                 local bestPos = Vector(0,0,0)
 
-                for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do 	 	--looking for predator
+                for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius*1.5)) do 	 	--looking for predator
 
                     if self.predator[v:GetClass()] and v:IsValid() and (v:IsNextBot() or v:IsPlayer() or v:IsNPC()) and v:Health() > 0 and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
                         if target != nil then       --flee the closest predator

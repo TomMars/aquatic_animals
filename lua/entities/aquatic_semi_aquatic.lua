@@ -25,9 +25,6 @@ ENT.wreckable_vehicles = {} --small, big, huge
 
 if CLIENT then return end
 
---TODO
---avoid kind npc to kill prey often
-
 function ENT:Initialize()
     self.ground_mdl = string.sub(self.model, 1, -5).. "_ground.mdl"
 
@@ -71,8 +68,8 @@ function ENT:Initialize()
     self.idleTimer = -1
     self.suffocate = -1
     self.groundTimer = -1
+    self.class = self:GetClass()
     if self.hasSound then 
-        self.class = self:GetClass()
         self.lastSound = "" 
     end
 
@@ -429,9 +426,9 @@ function ENT:NavThink() --when navmesh
                 self.fear = false
                 self:BehaveStart()
             else
-                for _, v in pairs(ents.FindInCone(self:GetPos(), self:GetForward(), self.groundRadius, 0,707)) do  --change the angle if facing the predator
+                for _, v in pairs(ents.FindInCone(self:GetPos(), self:GetForward(), self.groundRadius, 0,177)) do  --change the angle if facing the predator
                     if v == target then
-                        self.goal = Angle(0, self:GetAngles().y + 180, 0):Forward() * self.groundRadius
+                        self.goal = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * self.groundRadius
                         self.turnCount = 0
                         break
                     end          
@@ -554,7 +551,7 @@ function ENT:SwimBehaviour()
             local target = nil
             local bestPos = Vector(0,0,0)
 
-            for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do 	 	--looking for predator
+            for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius*1.5)) do 	 	--looking for predator
 
                 if  v:IsValid() and (self.predator[v:GetClass()] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0 and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
                     if target != nil then       --flee the closest predator
@@ -710,12 +707,13 @@ function ENT:OnInjured(dmg)
             self.depth = self.minDepth
         else
             local rad = self.radius
+            local isPly = attacker:IsPlayer()
             if !self.swim then rad = self.groundRadius*3 end
             for _, v in pairs(ents.FindInSphere(self:GetPos(), rad)) do
                 if v == attacker then
                     if !self.aggressive then
                         self.fear = true
-                        if attacker:IsPlayer() then
+                        if isPly then
                             self.fearPlayers = true
                         end
                     end
@@ -727,7 +725,11 @@ function ENT:OnInjured(dmg)
                         end
                         self:BehaveStart()
                     end
-                    break
+                elseif !self.aggressive and isPly and v:GetClass() == self.class and v:IsValid() then   --surrounding npcs with the same class will fear players
+                    v.fearPlayers = true
+                    if v.target == nil then
+                        v:BehaveStart()
+                    end
                 end
             end
         end

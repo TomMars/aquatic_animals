@@ -150,25 +150,37 @@ end)
 
 
 --------------- SPAWNLIST -----------------
-local animals = {"Blue Shark", "Reef Shark", "Hammerhead Shark", "Bull Shark", "Great White Shark", 
-                 "Great White Shark 2", "Killer Whale", "Sperm Whale", "Sea Turtle"}
+if !game.SinglePlayer() then
+    local animals = {"Blue Shark", "Reef Shark", "Hammerhead Shark", "Bull Shark", "Great White Shark", 
+                    "Great White Shark 2", "Killer Whale", "Sperm Whale", "Sea Turtle", "Dolphin",
+                    "Manatee"}
 
-for _, name in pairs(animals) do
-    local class = "npc_".. string.Replace(string.lower(name), " ", "_")
-    list.Set("NPC", class, {
-        Name = name,
-        Class = class,
-        Category = "Aquatic Animals"
-    })
-end
+    for _, name in pairs(animals) do
+        local class = "npc_".. string.Replace(string.lower(name), " ", "_")
+        list.Set("NPC", class, {
+            Name = name,
+            Class = class,
+            Category = "Aquatic Animals"
+        })
+    end
 
-animals = {"Megalodon"}
+    animals = {"Megalodon"}
 
-for _, name in pairs(animals) do
-    local class = "npc_".. string.Replace(string.lower(name), " ", "_")
-    list.Set("NPC", class, {
-        Name = name,
-        Class = class,
-        Category = "Aquatic Animals (Extinct)"
-    })
+    for _, name in pairs(animals) do
+        local class = "npc_".. string.Replace(string.lower(name), " ", "_")
+        list.Set("NPC", class, {
+            Name = name,
+            Class = class,
+            Category = "Aquatic Animals (Extinct)"
+        })
+    end
+else
+    local msg = true
+    hook.Add( "PlayerSpawn", "AquaticSinglePlayerError", function(ply)
+        if msg then
+            PrintMessage(HUD_PRINTTALK, "Aquatic Animals are not working in singleplayer")
+            PrintMessage(HUD_PRINTTALK, "Launching a LAN game will allow you to spawn the npcs")
+            msg = false
+        end
+    end )
 end
