@@ -124,7 +124,7 @@ function ENT:RunBehaviour()
 
                 for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius*1.5)) do 	 	--looking for predator
 
-                    if v:IsValid() and (self.predator[v:GetClass()] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0 and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
+                    if v:IsValid() and (v == self.target or self.predator[v:GetClass()] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0 and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
                         if target != nil then       --flee the closest predator
                             local pos = self:GetPos():DistToSqr(v:GetPos())
                             if pos < bestPos then
