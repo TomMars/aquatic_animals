@@ -230,6 +230,8 @@ function ENT:OnInjured(dmg)
     self:StopSound(self.lastSound)
     self.lastSound = "aquatic_animals/".. string.sub(self.class, 5).. "_injured".. math.random(1,2).. ".mp3"
     self:EmitSound(self.lastSound, 100)
+
+    if dmg:IsExplosionDamage() then dmg:SetDamage(dmg:GetDamage() * 20) end
     
     local attacker = dmg:GetAttacker()
     if self.target == nil and !self.predator[attacker:GetClass()] and (!attacker:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0) then

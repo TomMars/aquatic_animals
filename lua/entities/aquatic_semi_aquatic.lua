@@ -701,6 +701,8 @@ function ENT:OnInjured(dmg)
         self:EmitSound(self.lastSound, 100)
     end
 
+    if dmg:IsExplosionDamage() then dmg:SetDamage(dmg:GetDamage() * 20) end
+
     local attacker = dmg:GetAttacker()
     if self.target == nil and !self.predator[attacker:GetClass()] and (!attacker:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0) then
         if self.swim and attacker:WaterLevel() == 0 then
