@@ -1,0 +1,24 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "aquatic_animals/crocodile/crocodile_d"
+	"$bumpmap" "aquatic_animals/crocodile/crocodile_n"
+	"$phongexponenttexture""aquatic_animals/crocodile/crocodile_m"
+
+$ambientocclusion 1
+$halflambert 1
+	
+$phongexponent "7"
+$phongfresnelranges	"[1 8 13]"
+$nocull 1
+$phong 1
+$phongboost .2
+$nodecal 1
+$phongtint "[1 .85 .85]"
+
+$lightwarp "models/sheva_nude/l4d2_lightwarp"
+
+$detail "aquatic_animals\skindetail"
+$detailscale 35
+$detailblendfactor 1.7
+$detailblendmode 0
+}
