@@ -16,6 +16,7 @@ ENT.identicalRadius = false --identical radius on ground and underwater
 ENT.upStep = 45
 ENT.minDepth = 69
 ENT.maxDepth = 76
+ENT.stepHeight = 32 --used to make npcs collide on ground when chasing a prey, depending on the model 
 ENT.switchTimer = 1200 --time before switching to swimming
 
 ENT.ignore = {}
@@ -55,7 +56,7 @@ function ENT:Initialize()
     else
         self.groundRadius = self.radius*0.5
     end
-    self.groundDmgRadius = math.pow(self.groundRadius*0.2, 2)
+    self.groundDmgRadius = math.pow(self.groundRadius*0.3, 2)
 
     if self.nav then
         self.goal = self:GetPos() + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * self.groundRadius
@@ -148,7 +149,7 @@ function ENT:NoNavBehaviour() --when no navmesh
 
             if target then
                 self.loco:SetDesiredSpeed(self.groundSpeed * 2)
-                self.loco:SetStepHeight(32)
+                self.loco:SetStepHeight(self.stepHeight)
                 if self.attack then     --damage the prey
                     self:PlaySequenceAndWait("attack")
 
@@ -223,7 +224,7 @@ function ENT:NoNavBehaviour() --when no navmesh
             self.swim = true
             self:SetModel(self.model)
             self:StartActivity(ACT_IDLE)
-            self.loco:SetStepHeight(32)
+            self.loco:SetStepHeight(self.stepHeight)
             self:SetPos(self:GetPos() + Vector(0,0,self.upStep))
             self.groundTimer = -1
         end
@@ -294,7 +295,7 @@ function ENT:NavBehaviour() --when navmesh
 
         else
             self.loco:SetDesiredSpeed(self.groundSpeed * 2)
-            self.loco:SetStepHeight(32)
+            self.loco:SetStepHeight(self.stepHeight)
 
             if self.attack then     --damage the prey
                 self:PlaySequenceAndWait("attack")
@@ -314,10 +315,10 @@ function ENT:NavBehaviour() --when navmesh
                 --logic from gmod wiki ENT:Chase() https://wiki.facepunch.com/gmod/NextBot_NPC_Creation
                 local path = Path("Follow")
                 path:SetMinLookAheadDistance(self.groundRadius)
-                path:SetGoalTolerance(self.groundDmgRadius)
+                path:SetGoalTolerance(self.groundDmgRadius*0.25)
                 path:Compute(self, self.target:GetPos())		-- Compute the path towards the enemies position
 
-                while path:IsValid() and self.target != nil do
+                while path:IsValid() and self.target != nil and self.target:IsValid() do
                 
                     if path:GetAge() > 0.1 then					-- Since we are following the target we have to constantly remake the path
                         path:Compute(self, self.target:GetPos())    -- Compute the path towards the enemy's position again
@@ -453,7 +454,7 @@ function ENT:NavThink() --when navmesh
             self.swim = true
             self:SetModel(self.model)
             self:StartActivity(ACT_IDLE)
-            self.loco:SetStepHeight(32)
+            self.loco:SetStepHeight(self.stepHeight)
             self:SetPos(self:GetPos() + Vector(0,0,self.upStep))
             self.groundTimer = -1
             self.turnCount = 0

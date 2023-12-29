@@ -153,7 +153,7 @@ end)
 if !game.SinglePlayer() then
     local animals = {"Blue Shark", "Reef Shark", "Hammerhead Shark", "Bull Shark", "Great White Shark", 
                     "Great White Shark 2", "Killer Whale", "Sperm Whale", "Sea Turtle", "Dolphin",
-                    "Manatee", "Blue Whale"}
+                    "Manatee", "Blue Whale", "Crocodile"}
 
     for _, name in pairs(animals) do
         local class = "npc_".. string.Replace(string.lower(name), " ", "_")
