@@ -1,7 +1,7 @@
-include("aquatic_semi_aquatic.lua")
+include("aquatic_semi.lua")
 AddCSLuaFile()
 
-ENT.base = "aquatic_semi_aquatic"
+ENT.base = "aquatic_semi"
 
 ENT.model = "models/aquatic_animals/sea_turtle.mdl"
 ENT.skin = {0, 1}

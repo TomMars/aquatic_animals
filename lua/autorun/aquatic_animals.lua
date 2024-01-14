@@ -1,15 +1,15 @@
-if !file.Exists("aquatic_animals/wreckable_vehicles.json", "DATA") then
+if !file.Exists("faubreins_animals/wreckable_vehicles.json", "DATA") then
     local tbl = {small= {"Airboat", "vehicle_kaw_jetski"}, big= {"Yacht_1", "Yacht_2"}, huge= {}}
-    file.CreateDir("aquatic_animals")
-    file.Write("aquatic_animals/wreckable_vehicles.json", util.TableToJSON(tbl, true))
+    file.CreateDir("faubreins_animals")
+    file.Write("faubreins_animals/wreckable_vehicles.json", util.TableToJSON(tbl, true))
 end
 
-hook.Add("AddToolMenuCategories", "AquaticAnimalsCategory", function()
-    spawnmenu.AddToolCategory("Options", "AquaticAnimals", "#Aquatic Animals")
+hook.Add("AddToolMenuCategories", "FaubreinsAnimalsCategory", function()
+    spawnmenu.AddToolCategory("Options", "FaubreinsAnimals", "#Faubrein's Animals")
 end)
 
-hook.Add("PopulateToolMenu", "AquaticAnimalsSettings", function()
-    spawnmenu.AddToolMenuOption("Options", "AquaticAnimals", "WreckableVehicles", "#Wreckable Vehicles", "", "", function(panel)
+hook.Add("PopulateToolMenu", "FaubreinsAnimalsSettings", function()
+    spawnmenu.AddToolMenuOption("Options", "FaubreinsAnimals", "WreckableVehicles", "#Wreckable Vehicles", "", "", function(panel)
 
         function PopupFrame(title)
             local frame = vgui.Create("DFrame")
@@ -40,7 +40,7 @@ hook.Add("PopulateToolMenu", "AquaticAnimalsSettings", function()
 
         function LoadFile(dlist)
             for key, val in pairs({"small", "big", "huge"}) do
-                for k, v in pairs(util.JSONToTable(file.Read("aquatic_animals/wreckable_vehicles.json"))[val]) do
+                for k, v in pairs(util.JSONToTable(file.Read("faubreins_animals/wreckable_vehicles.json"))[val]) do
                     dlist:AddLine(v, val)
                 end
             end
@@ -97,6 +97,23 @@ hook.Add("PopulateToolMenu", "AquaticAnimalsSettings", function()
             end
         end
 
+        local ad = vgui.Create("DButton", panel)
+        ad:Dock(TOP)
+        ad:SetText("Auto Detect")
+
+        function ad:DoClick()
+            local tbl = {}
+            for _, v in pairs(pnl:GetLines()) do
+                tbl[v:GetColumnText(1)] = true
+            end
+            for k, _ in pairs(list.Get("Vehicles")) do
+                if !tbl[k] then pnl:AddLine(k, "small") end
+            end            
+            for k, _ in pairs(list.Get("simfphys_vehicles")) do  --symfphys
+                if !tbl[k] then pnl:AddLine(k, "small") end
+            end
+        end
+
         local rem = vgui.Create("DButton", panel)
         rem:Dock(TOP)
         rem:SetText("Remove")
@@ -136,7 +153,7 @@ hook.Add("PopulateToolMenu", "AquaticAnimalsSettings", function()
                     for k,v in pairs(pnl:GetLines()) do
                         table.insert(tbl[v:GetColumnText(2)], v:GetColumnText(1))
                     end
-                    file.Write("aquatic_animals/wreckable_vehicles.json", util.TableToJSON(tbl, true))
+                    file.Write("faubreins_animals/wreckable_vehicles.json", util.TableToJSON(tbl, true))
                     frame:Close()
                 end
 

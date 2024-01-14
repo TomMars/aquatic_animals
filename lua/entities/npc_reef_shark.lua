@@ -1,7 +1,7 @@
-include("aquatic_shark.lua")
+include("aquatic_hostile.lua")
 AddCSLuaFile()
 
-ENT.base = "aquatic_shark"
+ENT.base = "aquatic_hostile"
 
 ENT.model = "models/aquatic_animals/reef_shark.mdl"
 ENT.skin = {0, 1}
