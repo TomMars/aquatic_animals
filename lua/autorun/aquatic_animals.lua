@@ -64,8 +64,16 @@ hook.Add("PopulateToolMenu", "FaubreinsAnimalsSettings", function()
                 local frame, input, cbox = PromptFrame("Add a wreckable vehicle")
 
                 function frame:OnClose()
-                    if input:GetValue() != "" and cbox:GetValue() != "Size" then
-                        pnl:AddLine(input:GetValue(), cbox:GetValue())
+                    local exists = false
+                    local ival = input:GetValue()
+                    for _, v in pairs(pnl:GetLines()) do
+                        if ival == v:GetColumnText(1) then exists = true break end
+                    end
+                    if !exists and ival != "" and cbox:GetValue() != "Size" then
+                        pnl:AddLine(ival, cbox:GetValue())
+                    elseif exists then
+                        notification.AddLegacy("Class "..ival.." is already wreckable", NOTIFY_ERROR, 5)
+                        surface.PlaySound("buttons/button10.wav")
                     end
                     promptOpen = false
                 end
@@ -87,9 +95,17 @@ hook.Add("PopulateToolMenu", "FaubreinsAnimalsSettings", function()
                     cbox:SetValue(line:GetColumnText(2))
 
                     function frame:OnClose()
-                        if input:GetValue() != "" and cbox:GetValue() != "Size" then
-                            line:SetColumnText(1, input:GetValue())
+                        local exists = false
+                        local ival = input:GetValue()
+                        for _, v in pairs(pnl:GetLines()) do
+                            if ival == v:GetColumnText(1) and v!= line then exists = true break end
+                        end
+                        if !exists and ival != "" then
+                            line:SetColumnText(1, ival)
                             line:SetColumnText(2, cbox:GetValue())
+                        elseif exists then
+                            notification.AddLegacy("Class "..ival.." is already wreckable", NOTIFY_ERROR, 5)
+                            surface.PlaySound("buttons/button10.wav")
                         end
                         promptOpen = false
                     end
@@ -170,7 +186,7 @@ end)
 if !game.SinglePlayer() then
     local animals = {"Blue Shark", "Reef Shark", "Hammerhead Shark", "Bull Shark", "Great White Shark", 
                     "Great White Shark 2", "Killer Whale", "Sperm Whale", "Sea Turtle", "Dolphin",
-                    "Manatee", "Blue Whale", "Crocodile"}
+                    "Manatee", "Blue Whale", "Crocodile", "Piranha"}
 
     for _, name in pairs(animals) do
         local class = "npc_".. string.Replace(string.lower(name), " ", "_")

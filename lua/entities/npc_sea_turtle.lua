@@ -5,8 +5,8 @@ ENT.base = "aquatic_semi"
 
 ENT.model = "models/aquatic_animals/sea_turtle.mdl"
 ENT.skin = {0, 1}
-ENT.health = 50
-ENT.speed = 50
+ENT.health = 75
+ENT.speed = 75
 ENT.groundSpeed = 5
 ENT.damage = 10
 
