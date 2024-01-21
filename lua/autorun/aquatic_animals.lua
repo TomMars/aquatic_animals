@@ -181,7 +181,7 @@ if !game.SinglePlayer() then
         })
     end
 
-    animals = {"Megalodon"}
+    animals = {"Megalodon", "Mosasaurus"}
 
     for _, name in pairs(animals) do
         local class = "npc_".. string.Replace(string.lower(name), " ", "_")

@@ -3,7 +3,7 @@ AddCSLuaFile()
 
 ENT.base = "aquatic_hostile"
 
-ENT.model = "models/aquatic_animals/megalodon.mdl"
+ENT.model = "models/aquatic_animals/mosasaurus.mdl"
 ENT.health = 5000
 ENT.speed = 120
 ENT.damage = 1000

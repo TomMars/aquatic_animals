@@ -10,7 +10,7 @@ ENT.damage = 500
 ENT.defensive = true
 ENT.hasSound = true
 
-ENT.radius = 2000
+ENT.radius = 2250
 ENT.upStep = 60
 
 ENT.ignore = {npc_sperm_whale = true, npc_sea_turtle = true, npc_dolphin = true, npc_manatee = true, 

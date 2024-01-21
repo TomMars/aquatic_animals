@@ -14,7 +14,7 @@ ENT.radius = 1500
 ENT.upStep = 70
 
 ENT.ignore = {npc_killer_whale = true, npc_blue_whale = true}
-ENT.predator = {npc_sperm_whale = true, npc_megalodon = true}
+ENT.predator = {npc_sperm_whale = true, npc_megalodon = true, npc_mosasaurus = true}
 ENT.wreckable_vehicles = {"small"}
 
 if SERVER then

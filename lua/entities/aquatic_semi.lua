@@ -50,7 +50,7 @@ function ENT:Initialize()
     self.turnCount = 20
     self.attack = false
 
-    self.dmgRadius = math.pow(self.radius*0.25, 2)
+    self.dmgRadius = math.pow(self.radius*0.35, 2)
     if self.identicalRadius then
         self.groundRadius = self.radius
     else

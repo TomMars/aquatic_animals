@@ -34,7 +34,7 @@ function ENT:Initialize()
     self.depth = self.maxDepth
     self.turnCount = 20
     self.attack = false
-    self.dmgRadius = math.pow(self.radius*0.25, 2)
+    self.dmgRadius = math.pow(self.radius*0.35, 2)
     self.fearPlayers = false
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
