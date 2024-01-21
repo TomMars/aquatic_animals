@@ -713,10 +713,10 @@ function ENT:OnInjured(dmg)
             for _, v in pairs(ents.FindInSphere(self:GetPos(), rad)) do
                 if v == attacker then
                     if !self.aggressive then
+                        local class = attacker:GetClass()
                         self.fear = true
-                        if isPly then
-                            self.fearPlayers = true
-                        end
+                        if isPly then self.fearPlayers = true
+                        elseif !self.predator[class] then self.predator[class] = true end
                     end
                     self.target = attacker
                     if !self.swim then
