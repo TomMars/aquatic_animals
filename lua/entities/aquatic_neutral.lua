@@ -9,11 +9,13 @@ ENT.speed = 100
 ENT.damage = 20
 ENT.defensive = false
 ENT.hasSound = false
+ENT.fearPlayers = false
 
 ENT.radius = 1000
 ENT.upStep = 45
 ENT.minDepth = 69
 ENT.maxDepth = 76
+ENT.soundLevel = 80
 
 ENT.ignore = {}
 ENT.prey = {}
@@ -35,7 +37,6 @@ function ENT:Initialize()
     self.turnCount = 20
     self.attack = false
     self.dmgRadius = math.pow(self.radius*0.35, 2)
-    self.fearPlayers = false
     self.lastPos = Vector(0, 0, 0)
     self.suffocate = -1
     self.class = self:GetClass()
@@ -57,7 +58,7 @@ function ENT:RunBehaviour()
                     self:SetAngles(Angle(0, math.random(0, 360), 0))
                     if self.hasSound and math.random(1, 2) == 2 then
                         self.lastSound = "aquatic_animals/".. string.sub(self.class, 5).. "_idle".. math.random(1,3).. ".mp3"
-                        self:EmitSound(self.lastSound, 100)
+                        self:EmitSound(self.lastSound, self.soundLevel)
                     end
                 end
                 
@@ -72,7 +73,7 @@ function ENT:RunBehaviour()
                     for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do 	 	--looking for prey
                         local class = v:GetClass()
 
-                        if v != self and (((self.prey[class] or self.predator[class] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0) or (self.defensive and self.fearPlayers and v:IsVehicle() and self.vehicles[v:GetVehicleClass()] and v:GetDriver() != NULL and (!v:GetDriver():IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
+                        if GetConVarNumber("ai_disabled") == 0 and v != self and (((self.prey[class] or self.predator[class] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0) or (self.defensive and self.fearPlayers and v:IsVehicle() and self.vehicles[v:GetVehicleClass()] and v:GetDriver() != NULL and (!v:GetDriver():IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
                             if self.predator[class] or (!self.defensive and v:IsPlayer()) then
                                 self.fear = true
                                 self.target = v
@@ -98,7 +99,7 @@ function ENT:RunBehaviour()
                 local target = false 	
 
                 for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do 	 --check if the prey still here	    
-                    if v == self.target and v:IsValid() and (((!v:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0) and v:Health() > 0) or (v:IsVehicle() and (!v:GetDriver():IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:WaterLevel() > 0 and self:WaterLevel() > 0  then
+                    if v == self.target and GetConVarNumber("ai_disabled") == 0 and v:IsValid() and (((!v:IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0) and v:Health() > 0) or (v:IsVehicle() and (!v:GetDriver():IsPlayer() or GetConVarNumber("ai_ignoreplayers") == 0))) and v:WaterLevel() > 0 and self:WaterLevel() > 0  then
                         target = true
                         break
                     end 
@@ -139,7 +140,7 @@ function ENT:RunBehaviour()
 
                 for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius*1.5)) do 	 	--looking for predator
 
-                    if v:IsValid() and (v == self.target or self.predator[v:GetClass()] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0 and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
+                    if GetConVarNumber("ai_disabled") == 0 and v:IsValid() and (self.predator[v:GetClass()] or (self.fearPlayers and v:IsPlayer() and GetConVarNumber("ai_ignoreplayers") == 0)) and v:Health() > 0 and v:WaterLevel() > 0 and self:WaterLevel() > 0 then
                         if target != nil then       --flee the closest predator
                             local pos = self:GetPos():DistToSqr(v:GetPos())
                             if pos < bestPos then
@@ -245,7 +246,7 @@ function ENT:OnInjured(dmg)
     if self.hasSound then
         self:StopSound(self.lastSound)
         self.lastSound = "aquatic_animals/".. string.sub(self.class, 5).. "_injured".. math.random(1,2).. ".mp3"
-        self:EmitSound(self.lastSound, 100)
+        self:EmitSound(self.lastSound, self.soundLevel)
     end
 
     if dmg:IsExplosionDamage() then dmg:SetDamage(dmg:GetDamage() * 20) end
@@ -257,6 +258,8 @@ function ENT:OnInjured(dmg)
         else
             if self:GetPos():DistToSqr(attacker:GetPos()) <= self.radius*self.radius then
                 self.target = attacker
+                local class = attacker:GetClass()
+                if !self.defensive and !self.predator[class] then self.predator[class] = true end
                 for _, v in pairs(ents.FindInSphere(self:GetPos(), self.radius)) do
                     if v:GetClass() == self.class and v:IsValid() and v:WaterLevel() > 0 then     --surrounding npcs with the same class will fear or target attacker
                         if !v.fearPlayers and attacker:IsPlayer() then

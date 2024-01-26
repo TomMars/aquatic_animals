@@ -10,3 +10,4 @@ ENT.hasSound = true
 
 ENT.radius = 3000
 ENT.upStep = 100
+ENT.soundLevel = 100

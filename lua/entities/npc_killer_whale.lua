@@ -13,7 +13,7 @@ ENT.hasSound = true
 ENT.radius = 1500
 ENT.upStep = 70
 
-ENT.ignore = {npc_killer_whale = true, npc_blue_whale = true}
+ENT.ignore = {npc_killer_whale = true, npc_blue_whale = true, npc_roach = true, npc_goldfish = true}
 ENT.predator = {npc_sperm_whale = true, npc_megalodon = true, npc_mosasaurus = true}
 ENT.wreckable_vehicles = {"small"}
 
