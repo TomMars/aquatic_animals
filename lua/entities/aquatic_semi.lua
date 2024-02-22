@@ -226,6 +226,8 @@ function ENT:NoNavBehaviour() --when no navmesh
             self.loco:SetStepHeight(self.stepHeight)
             self:SetPos(self:GetPos() + Vector(0,0,self.upStep))
             self.groundTimer = -1
+            self:SetNotSolid(true)
+            timer.Simple(5, function() if IsValid(self) then self:SetNotSolid(false) end end)
         end
     else
         self.groundTimer = -1
@@ -457,7 +459,9 @@ function ENT:NavThink() --when navmesh
             self:SetPos(self:GetPos() + Vector(0,0,self.upStep))
             self.groundTimer = -1
             self.turnCount = 0
+            self:SetNotSolid(true)
             self:BehaveStart()
+            timer.Simple(5, function() if IsValid(self) then self:SetNotSolid(false) end end)
         end
     else
         self.groundTimer = -1
