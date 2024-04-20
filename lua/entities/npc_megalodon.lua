@@ -11,5 +11,6 @@ ENT.damage = 1000
 ENT.radius = 2250
 ENT.upStep = 60
 
-ENT.ignore = {npc_piranha = true, npc_roach = true, npc_goldfish = true}
+ENT.ignore = {npc_piranha = true, npc_roach = true, npc_goldfish = true, npc_bass = true,
+              npc_pike = true}
 ENT.wreckable_vehicles = {"small", "big"}
