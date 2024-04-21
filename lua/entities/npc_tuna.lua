@@ -3,9 +3,9 @@ AddCSLuaFile()
 
 ENT.base = "aquatic_neutral"
 
-ENT.model = "models/aquatic_animals/bass.mdl"
+ENT.model = "models/aquatic_animals/tuna.mdl"
 ENT.health = 15
-ENT.speed = 50
+ENT.speed = 55
 ENT.damage = 2
 ENT.fearPlayers = true
 

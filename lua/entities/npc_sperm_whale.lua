@@ -16,7 +16,7 @@ ENT.soundLevel = 100
 
 ENT.ignore = {npc_sperm_whale = true, npc_sea_turtle = true, npc_dolphin = true, npc_manatee = true, 
               npc_blue_whale = true, npc_piranha = true, npc_roach = true, npc_goldfish = true,
-              npc_bass = true, npc_pike = true}
+              npc_bass = true, npc_pike = true, npc_tuna = true}
 ENT.wreckable_vehicles = {"small", "big"}
 
 if SERVER then
