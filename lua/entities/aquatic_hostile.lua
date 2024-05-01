@@ -193,11 +193,17 @@ function ENT:RunBehaviour()
 end
 
 function ENT:Think()
+    local magicNum = -125/#player.GetAll()
+    for _, ent in ents.Iterator() do if ent:IsNextBot() then magicNum = magicNum + 1 end end
+    local lagFactor = 100
+    if magicNum > 0 then lagFactor = 100 * (1 + (magicNum*0.001)) end
+    
+
     if self:WaterLevel() == 3 then
         if self.target == nil then
-            self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * self.depth) * (100*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * self.depth) * (lagFactor*engine.TickInterval()))
         else
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 4) + (self:GetUp() * self.depth) * (100*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 4) + (self:GetUp() * self.depth) * (lagFactor*engine.TickInterval()))
         end
         self.suffocate = -1
     else
@@ -205,9 +211,9 @@ function ENT:Think()
         if self.suffocate == -1 then
             self.suffocate = 0
         elseif self.suffocate < 20 then
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + (self:GetUp() * (self.minDepth -3)) * (100*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + (self:GetUp() * (self.minDepth -3)) * (lagFactor*engine.TickInterval()))
         else
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * (100*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * (lagFactor*engine.TickInterval()))
         end
     end
 end
