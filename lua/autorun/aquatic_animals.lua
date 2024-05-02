@@ -80,39 +80,6 @@ hook.Add("PopulateToolMenu", "FaubreinsAnimalsSettings", function()
             end
         end
 
-        local modify = vgui.Create("DButton", panel)
-        modify:Dock(TOP)
-        modify:SetText("Modify") 
-
-        function modify:DoClick()
-            if !promptOpen then
-                local _, line = pnl:GetSelectedLine()
-
-                if line != nil then
-                    promptOpen = true
-                    local frame, input, cbox = PromptFrame("Modify a wreckable vehicle")
-                    input:SetValue(line:GetColumnText(1))
-                    cbox:SetValue(line:GetColumnText(2))
-
-                    function frame:OnClose()
-                        local exists = false
-                        local ival = input:GetValue()
-                        for _, v in pairs(pnl:GetLines()) do
-                            if ival == v:GetColumnText(1) and v!= line then exists = true break end
-                        end
-                        if !exists and ival != "" then
-                            line:SetColumnText(1, ival)
-                            line:SetColumnText(2, cbox:GetValue())
-                        elseif exists then
-                            notification.AddLegacy("Class "..ival.." is already wreckable", NOTIFY_ERROR, 5)
-                            surface.PlaySound("buttons/button10.wav")
-                        end
-                        promptOpen = false
-                    end
-                end
-            end
-        end
-
         local ad = vgui.Create("DButton", panel)
         ad:Dock(TOP)
         ad:SetText("Auto Detect")
@@ -174,6 +141,31 @@ hook.Add("PopulateToolMenu", "FaubreinsAnimalsSettings", function()
                 end
 
                 function frame:OnClose()
+                    promptOpen = false
+                end
+            end
+        end
+
+        function pnl:DoDoubleClick(_, line)
+            if !promptOpen then
+                promptOpen = true
+                local frame, input, cbox = PromptFrame("Modify a wreckable vehicle")
+                input:SetValue(line:GetColumnText(1))
+                cbox:SetValue(line:GetColumnText(2))
+
+                function frame:OnClose()
+                    local exists = false
+                    local ival = input:GetValue()
+                    for _, v in pairs(pnl:GetLines()) do
+                        if ival == v:GetColumnText(1) and v!= line then exists = true break end
+                    end
+                    if !exists and ival != "" then
+                        line:SetColumnText(1, ival)
+                        line:SetColumnText(2, cbox:GetValue())
+                    elseif exists then
+                        notification.AddLegacy("Class "..ival.." is already wreckable", NOTIFY_ERROR, 5)
+                        surface.PlaySound("buttons/button10.wav")
+                    end
                     promptOpen = false
                 end
             end

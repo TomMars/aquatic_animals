@@ -13,7 +13,7 @@ ENT.fearPlayers = false
 
 ENT.radius = 1000
 ENT.upStep = 45
-ENT.minDepth = 69
+ENT.minDepth = 68
 ENT.maxDepth = 76
 ENT.soundLevel = 80
 
@@ -60,10 +60,9 @@ function ENT:RunBehaviour()
                         self.lastSound = "aquatic_animals/".. string.sub(self.class, 5).. "_idle".. math.random(1,3).. ".mp3"
                         self:EmitSound(self.lastSound, self.soundLevel)
                     end
-                end
-                
-                if self.depth == self.minDepth and self:WaterLevel() > 0 and math.random(1, 2000) == 2 then     --0,05% chance of changing depth
-                    self.depth = self.maxDepth
+                    if self.depth == self.minDepth and self:WaterLevel() > 0 and math.random(1, 100) == 2 then     --1% chance of changing depth
+                        self.depth = self.maxDepth
+                    end
                 end
                 
                 if self.turnCount >= 10 then
@@ -196,17 +195,17 @@ function ENT:RunBehaviour()
 end
 
 function ENT:Think()
-    local magicNum = -125/#player.GetAll()
+    local magicNum = -120/#player.GetAll()
     for _, ent in ents.Iterator() do if ent:IsNextBot() then magicNum = magicNum + 1 end end
-    local lagFactor = 100
-    if magicNum > 0 then lagFactor = 100 * (1 + (magicNum*0.001)) end
+    local lagFactor = 0
+    if magicNum > 0 then lagFactor = magicNum * 0.05 end
     
 
     if self:WaterLevel() == 3 then
         if self.target == nil then
-            self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * self.depth) * (lagFactor*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * (self.depth + lagFactor)) * (100*engine.TickInterval()))
         else
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 4) + (self:GetUp() * self.depth) * (lagFactor*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 4) + (self:GetUp() * (self.depth + lagFactor)) * (100*engine.TickInterval()))
         end
         self.suffocate = -1
     else
@@ -214,9 +213,9 @@ function ENT:Think()
         if self.suffocate == -1 then
             self.suffocate = 0
         elseif self.suffocate < 20 then
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + (self:GetUp() * (self.minDepth -3)) * (lagFactor*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + (self:GetUp() * (self.minDepth -3)) * (100*engine.TickInterval()))
         else
-            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * (lagFactor*engine.TickInterval()))
+            self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * (100*engine.TickInterval()))
         end
     end
 end
@@ -245,6 +244,7 @@ function ENT:OnContact(ent)
         if !self.fear or ent != self.target then    --avoid to face the predator
             self:SetAngles(Angle(0, self:GetAngles().y + math.random(135, 225), 0))
         end
+        if self.depth == self.maxDepth and math.random(1, 10) == 2 then self.depth = self.minDepth end      --tunnel depth fix
     end
 end
 
