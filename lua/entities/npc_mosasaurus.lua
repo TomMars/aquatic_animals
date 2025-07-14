@@ -11,6 +11,26 @@ ENT.damage = 1000
 ENT.radius = 2250
 ENT.upStep = 60
 
-ENT.ignore = {npc_piranha = true, npc_roach = true, npc_goldfish = true, npc_bass = true,
-              npc_pike = true, npc_tuna = true}
 ENT.wreckable_vehicles = {"small", "big"}
+
+local ignoreTypes = {
+    ["small_fish"] = true,
+    ["fish"] = true,
+    ["piranha"] = true
+}
+
+local predatorTypes = {
+    ["monster"] = true
+}
+
+if SERVER then
+    for k, v in pairs(list.Get("NPC")) do
+        if table.HasValue(v, "Aquatic Animals") or table.HasValue(v, "Aquatic Animals (Extinct)") then
+            if ignoreTypes[v.Type] then
+                ENT.ignore[k] = true
+            elseif predatorTypes[v.Type] then
+                ENT.predator[k] = true
+            end
+        end
+    end
+end

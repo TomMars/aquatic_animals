@@ -7,6 +7,21 @@ ENT.model = "models/aquatic_animals/manatee.mdl"
 ENT.speed = 70
 ENT.hasSound = true
 
-ENT.predator = {npc_blue_shark = true, npc_reef_shark = true, npc_hammerhead_shark = true, npc_bull_shark = true, 
-                npc_great_white_shark = true, npc_great_white_shark_2 = true, npc_killer_whale = true, 
-                npc_megalodon = true, npc_mosasaurus = true}
+local predatorTypes = {
+    ["shark"] = true,
+    ["big_shark"] = true,
+    ["huge_shark"] = true,
+    ["killer_whale"] = true,
+    ["huge_reptile"] = true,
+    ["monster"] = true
+}
+
+if SERVER then
+    for k, v in pairs(list.Get("NPC")) do
+        if table.HasValue(v, "Aquatic Animals") or table.HasValue(v, "Aquatic Animals (Extinct)") then
+            if predatorTypes[v.Type] then
+                ENT.predator[k] = true
+            end
+        end
+    end
+end

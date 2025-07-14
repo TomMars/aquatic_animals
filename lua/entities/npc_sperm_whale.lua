@@ -14,13 +14,29 @@ ENT.radius = 2250
 ENT.upStep = 60
 ENT.soundLevel = 100
 
-ENT.ignore = {npc_sperm_whale = true, npc_sea_turtle = true, npc_dolphin = true, npc_manatee = true, 
-              npc_blue_whale = true, npc_piranha = true, npc_roach = true, npc_goldfish = true,
-              npc_bass = true, npc_pike = true, npc_tuna = true}
 ENT.wreckable_vehicles = {"small", "big"}
+
+local preyTypes = {
+    ["shark"] = true,
+    ["big_shark"] = true,
+    ["huge_shark"] = true,
+    ["huge_reptile"] = true,
+    ["crocodile"] = true,
+    ["killer_whale"] = true
+}
+
+local predatorTypes = {
+    ["monster"] = true
+}
 
 if SERVER then
     for k, v in pairs(list.Get("NPC")) do
-        if !ENT.ignore[k] and (table.HasValue(v, "Aquatic Animals") or table.HasValue(v, "Aquatic Animals (Extinct)")) then ENT.prey[k] = true end
+        if table.HasValue(v, "Aquatic Animals") or table.HasValue(v, "Aquatic Animals (Extinct)") then
+            if preyTypes[v.Type] then
+                ENT.prey[k] = true
+            elseif predatorTypes[v.Type] then
+                ENT.predator[k] = true
+            end
+        end
     end
 end
