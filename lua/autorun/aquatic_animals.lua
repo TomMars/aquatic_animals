@@ -176,28 +176,50 @@ end)
 
 --------------- SPAWNLIST -----------------
 if !game.SinglePlayer() then
-    local animals = {"Blue Shark", "Reef Shark", "Hammerhead Shark", "Bull Shark", "Great White Shark", 
-                    "Great White Shark 2", "Killer Whale", "Sperm Whale", "Sea Turtle", "Dolphin",
-                    "Manatee", "Blue Whale", "Crocodile", "Piranha", "Roach",
-                    "Goldfish", "Bass", "Pike", "Tuna"}
+    local animals = {
+        {Name = "Blue Shark", Type = "shark"},
+        {Name = "Reef Shark", Type = "shark"},
+        {Name = "Hammerhead Shark", Type = "shark"},
+        {Name = "Bull Shark", Type = "shark"},
+        {Name = "Great White Shark", Type = "big_shark"},
+        {Name = "Great White Shark 2", Type = "big_shark"},
+        {Name = "Killer Whale", Type = "killer_whale"},
+        {Name = "Sperm Whale", Type = "sperm_whale"},
+        {Name = "Sea Turtle", Type = "turtle"},
+        {Name = "Dolphin", Type = "dolphin"},
+        {Name = "Manatee", Type = "manatee"},
+        {Name = "Blue Whale", Type = "huge_whale"},
+        {Name = "Crocodile", Type = "crocodile"},
+        {Name = "Piranha", Type = "piranha"},
+        {Name = "Roach", Type = "small_fish"},
+        {Name = "Goldfish", Type = "small_fish"},
+        {Name = "Bass", Type = "fish"},
+        {Name = "Pike", Type = "fish"},
+        {Name = "Tuna", Type = "fish"},
+    }
 
-    for _, name in pairs(animals) do
-        local class = "npc_".. string.Replace(string.lower(name), " ", "_")
+    for _, animal in ipairs(animals) do
+        local class = "npc_" .. string.Replace(string.lower(animal.Name), " ", "_")
         list.Set("NPC", class, {
-            Name = name,
+            Name = animal.Name,
             Class = class,
-            Category = "Aquatic Animals"
+            Category = "Aquatic Animals",
+            Type = animal.Type
         })
     end
 
-    animals = {"Megalodon", "Mosasaurus"}
+    animals = {
+        {Name = "Megalodon", Type = "huge_shark"},
+        {Name = "Mosasaurus", Type = "huge_reptile"},
+    }
 
-    for _, name in pairs(animals) do
-        local class = "npc_".. string.Replace(string.lower(name), " ", "_")
+    for _, animal in ipairs(animals) do
+        local class = "npc_" .. string.Replace(string.lower(animal.Name), " ", "_")
         list.Set("NPC", class, {
-            Name = name,
+            Name = animal.Name,
             Class = class,
-            Category = "Aquatic Animals (Extinct)"
+            Category = "Aquatic Animals (Extinct)",
+            Type = animal.Type
         })
     end
 else
