@@ -175,6 +175,18 @@ end)
 
 
 --------------- SPAWNLIST -----------------
+function Spawnlist(animals, category)
+    for _, animal in ipairs(animals) do
+        local class = "npc_" .. string.Replace(string.lower(animal.Name), " ", "_")
+        list.Set("NPC", class, {
+            Name = animal.Name,
+            Class = class,
+            Category = category,
+            Type = animal.Type
+        })
+    end
+end
+
 if !game.SinglePlayer() then
     local animals = {
         {Name = "Blue Shark", Type = "shark"},
@@ -198,30 +210,15 @@ if !game.SinglePlayer() then
         {Name = "Tuna", Type = "fish"},
     }
 
-    for _, animal in ipairs(animals) do
-        local class = "npc_" .. string.Replace(string.lower(animal.Name), " ", "_")
-        list.Set("NPC", class, {
-            Name = animal.Name,
-            Class = class,
-            Category = "Aquatic Animals",
-            Type = animal.Type
-        })
-    end
+    Spawnlist(animals, "Aquatic Animals")
 
     animals = {
         {Name = "Megalodon", Type = "huge_shark"},
         {Name = "Mosasaurus", Type = "huge_reptile"},
     }
 
-    for _, animal in ipairs(animals) do
-        local class = "npc_" .. string.Replace(string.lower(animal.Name), " ", "_")
-        list.Set("NPC", class, {
-            Name = animal.Name,
-            Class = class,
-            Category = "Aquatic Animals (Extinct)",
-            Type = animal.Type
-        })
-    end
+    Spawnlist(animals, "Aquatic Animals (Extinct)")
+    
 else
     local msg = true
     hook.Add( "PlayerSpawn", "AquaticSinglePlayerError", function(ply)
