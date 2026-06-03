@@ -187,45 +187,33 @@ function Spawnlist(animals, category)
     end
 end
 
-if !game.SinglePlayer() then
-    local animals = {
-        {Name = "Blue Shark", Type = "shark"},
-        {Name = "Reef Shark", Type = "shark"},
-        {Name = "Hammerhead Shark", Type = "shark"},
-        {Name = "Bull Shark", Type = "shark"},
-        {Name = "Great White Shark", Type = "big_shark"},
-        {Name = "Great White Shark 2", Type = "big_shark"},
-        {Name = "Killer Whale", Type = "killer_whale"},
-        {Name = "Sperm Whale", Type = "sperm_whale"},
-        {Name = "Sea Turtle", Type = "turtle"},
-        {Name = "Dolphin", Type = "dolphin"},
-        {Name = "Manatee", Type = "manatee"},
-        {Name = "Blue Whale", Type = "huge_whale"},
-        {Name = "Crocodile", Type = "crocodile"},
-        {Name = "Piranha", Type = "piranha"},
-        {Name = "Roach", Type = "small_fish"},
-        {Name = "Goldfish", Type = "small_fish"},
-        {Name = "Bass", Type = "fish"},
-        {Name = "Pike", Type = "fish"},
-        {Name = "Tuna", Type = "fish"},
-    }
+local animals = {
+    {Name = "Blue Shark", Type = "shark"},
+    {Name = "Reef Shark", Type = "shark"},
+    {Name = "Hammerhead Shark", Type = "shark"},
+    {Name = "Bull Shark", Type = "shark"},
+    {Name = "Great White Shark", Type = "big_shark"},
+    {Name = "Great White Shark 2", Type = "big_shark"},
+    {Name = "Killer Whale", Type = "killer_whale"},
+    {Name = "Sperm Whale", Type = "sperm_whale"},
+    {Name = "Sea Turtle", Type = "turtle"},
+    {Name = "Dolphin", Type = "dolphin"},
+    {Name = "Manatee", Type = "manatee"},
+    {Name = "Blue Whale", Type = "huge_whale"},
+    {Name = "Crocodile", Type = "crocodile"},
+    {Name = "Piranha", Type = "piranha"},
+    {Name = "Roach", Type = "small_fish"},
+    {Name = "Goldfish", Type = "small_fish"},
+    {Name = "Bass", Type = "fish"},
+    {Name = "Pike", Type = "fish"},
+    {Name = "Tuna", Type = "fish"},
+}
 
-    Spawnlist(animals, "Aquatic Animals")
+Spawnlist(animals, "Aquatic Animals")
 
-    animals = {
-        {Name = "Megalodon", Type = "huge_shark"},
-        {Name = "Mosasaurus", Type = "huge_reptile"},
-    }
+animals = {
+    {Name = "Megalodon", Type = "huge_shark"},
+    {Name = "Mosasaurus", Type = "huge_reptile"},
+}
 
-    Spawnlist(animals, "Aquatic Animals (Extinct)")
-    
-else
-    local msg = true
-    hook.Add( "PlayerSpawn", "AquaticSinglePlayerError", function(ply)
-        if msg then
-            PrintMessage(HUD_PRINTTALK, "Aquatic Animals are not working in singleplayer")
-            PrintMessage(HUD_PRINTTALK, "Launching a LAN game will allow you to spawn the npcs")
-            msg = false
-        end
-    end )
-end
+Spawnlist(animals, "Aquatic Animals (Extinct)")

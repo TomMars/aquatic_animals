@@ -20,6 +20,7 @@ ENT.maxDepth = 76
 ENT.soundLevel = 80
 ENT.stepHeight = 32 --used to make npcs collide on ground when chasing a prey, depending on the model 
 ENT.switchTimer = 1200 --time before switching to swimming
+ENT.turnSpeed = 360
 
 ENT.ignore = {}
 ENT.prey = {} --used for kind npcs
@@ -45,6 +46,11 @@ function ENT:Initialize()
 
     self:SetHealth(self.health)
     self.nav = navmesh.IsLoaded()
+
+    if game.SinglePlayer() then
+        self.minDepth = self.minDepth - 64
+        self.maxDepth = self.maxDepth - 64
+    end
 
     self.fear = false
     self.target = nil
@@ -79,6 +85,23 @@ function ENT:Initialize()
             self.vehicles[v] = true
         end
     end
+end
+
+function ENT:SmoothPointAtTarget()
+    if !self.swim or !IsValid(self.target) or self.fear then return end
+
+    local direction = self.target:GetPos() - self:GetPos()
+    if direction:LengthSqr() == 0 then return end
+
+    local desired = direction:Angle()
+    local current = self:GetAngles()
+    local step = self.turnSpeed * engine.TickInterval()
+
+    self:SetAngles(Angle(
+        math.ApproachAngle(current.p, desired.p, step),
+        math.ApproachAngle(current.y, desired.y, step),
+        0
+    ))
 end
 
 function ENT:NoNavBehaviour() --when no navmesh
@@ -522,7 +545,9 @@ function ENT:SwimBehaviour()
             end
 
             if target then
-                self:PointAtEntity(self.target)
+                if !game.SinglePlayer() then
+                    self:PointAtEntity(self.target)
+                end
 
                 if self.attack then     --damage the prey
                     self:PlaySequenceAndWait("attack")
@@ -611,6 +636,10 @@ function ENT:SwimThink()
     local lagFactor = 0
     if magicNum > 0 then lagFactor = magicNum * 0.05 end
 
+    if game.SinglePlayer() and IsValid(self.target) and !self.fear then
+        self:SmoothPointAtTarget()
+    end
+
     if self:WaterLevel() == 3 then
         if self.target == nil then
             self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * (self.depth + lagFactor)) * (100*engine.TickInterval()))
@@ -655,6 +684,11 @@ function ENT:Think()
         end
     else
         self:SwimThink()
+    end
+
+    if game.SinglePlayer() and self.swim and IsValid(self.target) and !self.fear then
+        self:NextThink(CurTime())
+        return true
     end
 end
 

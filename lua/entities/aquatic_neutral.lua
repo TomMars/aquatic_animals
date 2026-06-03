@@ -16,6 +16,7 @@ ENT.upStep = 45
 ENT.minDepth = 68
 ENT.maxDepth = 76
 ENT.soundLevel = 80
+ENT.turnSpeed = 360
 
 ENT.ignore = {}
 ENT.prey = {}
@@ -30,6 +31,11 @@ function ENT:Initialize()
     self:SetHealth(self.health)
     self:SetPos(self:GetPos() + Vector(0,0,200))
     self:StartActivity(ACT_IDLE)
+
+    if game.SinglePlayer() then
+        self.minDepth = self.minDepth - 64
+        self.maxDepth = self.maxDepth - 64
+    end
 
     self.fear = false
     self.target = nil
@@ -48,6 +54,23 @@ function ENT:Initialize()
             self.vehicles[v] = true
         end
     end
+end
+
+function ENT:SmoothPointAtTarget()
+    if !IsValid(self.target) or self.fear then return end
+
+    local direction = self.target:GetPos() - self:GetPos()
+    if direction:LengthSqr() == 0 then return end
+
+    local desired = direction:Angle()
+    local current = self:GetAngles()
+    local step = self.turnSpeed * engine.TickInterval()
+
+    self:SetAngles(Angle(
+        math.ApproachAngle(current.p, desired.p, step),
+        math.ApproachAngle(current.y, desired.y, step),
+        0
+    ))
 end
 
 function ENT:RunBehaviour()
@@ -105,7 +128,9 @@ function ENT:RunBehaviour()
                 end
 
                 if target then
-                    self:PointAtEntity(self.target)
+                    if !game.SinglePlayer() then
+                        self:PointAtEntity(self.target)
+                    end
 
                     if self.attack then     --damage the prey
                         self:PlaySequenceAndWait("attack")
@@ -199,9 +224,14 @@ function ENT:Think()
     for _, ent in ents.Iterator() do if ent:IsNextBot() then magicNum = magicNum + 1 end end
     local lagFactor = 0
     if magicNum > 0 then lagFactor = magicNum * 0.05 end
-    
+
+    local chaseTarget = IsValid(self.target) and !self.fear
 
     if self:WaterLevel() == 3 then
+        if game.SinglePlayer() and chaseTarget then
+            self:SmoothPointAtTarget()
+        end
+
         if self.target == nil then
             self.loco:SetVelocity(self:GetForward() * self.speed + (self:GetUp() * (self.depth + lagFactor)) * (100*engine.TickInterval()))
         else
@@ -217,6 +247,11 @@ function ENT:Think()
         else
             self.loco:SetVelocity(self:GetForward() * (self.speed * 0.5) + self:GetUp() * (100*engine.TickInterval()))
         end
+    end
+
+    if game.SinglePlayer() and chaseTarget then
+        self:NextThink(CurTime())
+        return true
     end
 end
 
