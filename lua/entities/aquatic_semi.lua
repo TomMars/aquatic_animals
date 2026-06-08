@@ -336,18 +336,27 @@ function ENT:NavBehaviour() --when navmesh
                 self.attack = false
 
             else
-                --logic from gmod wiki ENT:Chase() https://wiki.facepunch.com/gmod/NextBot_NPC_Creation
                 local path = Path("Follow")
-                path:SetMinLookAheadDistance(self.groundRadius)
-                path:SetGoalTolerance(self.groundDmgRadius*0.25)
+                local lookAhead = self.groundRadius
+                local goalTolerance = self.groundDmgRadius * 0.25
+                local repathDelay = 0.1
+
+                if game.SinglePlayer() then
+                    lookAhead = math.max(self.groundRadius * 0.25, self.stepHeight * 2)
+                    goalTolerance = math.max(math.sqrt(self.groundDmgRadius) * 0.25, 8)
+                    repathDelay = math.max(engine.TickInterval() * 2, 0.03)
+                end
+
+                path:SetMinLookAheadDistance(lookAhead)
+                path:SetGoalTolerance(goalTolerance)
                 path:Compute(self, self.target:GetPos())		-- Compute the path towards the enemies position
 
                 while path:IsValid() and self.target != nil and self.target:IsValid() do
-                
-                    if path:GetAge() > 0.1 then					-- Since we are following the target we have to constantly remake the path
+
+                    if path:GetAge() > repathDelay then
                         path:Compute(self, self.target:GetPos())    -- Compute the path towards the enemy's position again
                     end
-                    path:Update(self)								-- This function moves the bot along the path
+                    path:Update(self)
                     
                     -- If we're stuck, then call the HandleStuck function and abandon
                     if self.loco:IsStuck() then
@@ -684,11 +693,6 @@ function ENT:Think()
         end
     else
         self:SwimThink()
-    end
-
-    if game.SinglePlayer() and self.swim and IsValid(self.target) and !self.fear then
-        self:NextThink(CurTime())
-        return true
     end
 end
 
